@@ -83,22 +83,19 @@ const startApp = async () => {
     ]);
     options.watermarkText = text.value;
 
-    existsSync('./img/' + options.inputImage) &&
+    if (existsSync('./img/' + options.inputImage)) {
       addTextWatermarkToImage(
         './img/' + options.inputImage,
         './img/' + prepareOutputFilename(options.inputImage),
         options.watermarkText
       );
-    console.log('Your file was created sucsesfully!');
-    startApp();
-  }
-
-  // try {
-  //   // normal code, it may throw an error at some point
-  // } catch (error) {
-  //   console.log(error); // if there's an error, we catch it and show it in console
-  // }
-  else {
+      console.log('Your file was created sucsesfully!');
+      startApp();
+    } else {
+      console.log('Something went wrong... try again');
+      process.exit();
+    }
+  } else {
     const image = await inquirer.prompt([
       {
         name: 'filename',
@@ -109,15 +106,21 @@ const startApp = async () => {
     ]);
     options.watermarkImage = image.filename;
 
-    existsSync('./img/' + options.inputImage) &&
-      existsSync('./img/' + options.watermarkImage) &&
+    if (
+      existsSync('./img/' + options.inputImage) &&
+      existsSync('./img/' + options.watermarkImage)
+    ) {
       addImageWatermarkToImage(
         './img/' + options.inputImage,
         './img/' + prepareOutputFilename(options.inputImage),
         './img/' + options.watermarkImage
       );
-    console.log('Your file was created sucsesfully!');
-    startApp();
+      console.log('Your file was created sucsesfully!');
+      startApp();
+    } else {
+      console.log('Something went wrong... try again');
+      process.exit();
+    }
   }
 };
 
